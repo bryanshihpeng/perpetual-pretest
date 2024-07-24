@@ -3,6 +3,7 @@ import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
+import { ReserveGateway } from '../interfaces/websocket/reserve.gateway';
 
 @Injectable()
 export class ExchangeService {
@@ -11,6 +12,7 @@ export class ExchangeService {
   constructor(
     @Inject(IReserveRepository)
     private readonly reserveRepository: IReserveRepository,
+    private readonly reserveGateway: ReserveGateway,
   ) {}
 
   async exchange(
@@ -46,6 +48,10 @@ export class ExchangeService {
     this.logger.log(
       `Trade executed: ${fromCurrencyAmount} ${fromCurrency.code} to ${toReserveSubtraction.amount} ${toCurrency.code}`,
     );
+
+    // Notify clients about the reserve change
+    const updatedReserves = await this.reserveRepository.getAllReserves();
+    this.reserveGateway.notifyReserveChange(updatedReserves);
 
     return toReserveSubtraction.amount;
   }
