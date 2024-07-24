@@ -4,10 +4,9 @@ import {
   OnGatewayDisconnect,
   WebSocketGateway,
   WebSocketServer,
-  SubscribeMessage,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
 import { EventEmitter2 } from 'eventemitter2';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
@@ -33,11 +32,14 @@ export class ReserveGateway
   }
 
   afterInit() {
-    this.eventEmitter.on('reserveChange', (reserves: { [key: string]: number }) => {
-      this.logger.log(
-        `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
-      );
-      this.server.emit('reserveChange', reserves);
-    });
+    this.eventEmitter.on(
+      'reserveChange',
+      (reserves: { [key: string]: number }) => {
+        this.logger.log(
+          `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
+        );
+        this.server.emit('reserveChange', reserves);
+      },
+    );
   }
 }

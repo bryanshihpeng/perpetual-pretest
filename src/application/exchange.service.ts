@@ -4,7 +4,6 @@ import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
-import { ReserveGateway } from '../interfaces/websocket/reserve.gateway';
 
 @Injectable()
 export class ExchangeService {
