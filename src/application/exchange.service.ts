@@ -1,4 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { EventEmitter2 } from 'eventemitter2';
 import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
@@ -12,7 +13,7 @@ export class ExchangeService {
   constructor(
     @Inject(IReserveRepository)
     private readonly reserveRepository: IReserveRepository,
-    private readonly reserveGateway: ReserveGateway,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async exchange(
@@ -49,9 +50,9 @@ export class ExchangeService {
       `Trade executed: ${fromCurrencyAmount} ${fromCurrency.code} to ${toReserveSubtraction.amount} ${toCurrency.code}`,
     );
 
-    // Notify clients about the reserve change
+    // Emit event about the reserve change
     const updatedReserves = await this.reserveRepository.getAllReserves();
-    this.reserveGateway.notifyReserveChange(updatedReserves);
+    this.eventEmitter.emit('reserveChange', updatedReserves);
 
     return toReserveSubtraction.amount;
   }

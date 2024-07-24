@@ -1,5 +1,6 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
+import { EventEmitter2 } from 'eventemitter2';
 import { ExchangeService } from './application/exchange.service';
 import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
 import { MikroOrmReserveRepository } from './infrastructure/persistence/mikro-orm/mikro-orm-reserve.repository';
@@ -12,7 +13,7 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
   controllers: [ExchangeController],
   providers: [
     ExchangeService,
-    ReserveGateway,
+    EventEmitter2,
     {
       provide: IReserveRepository,
       useClass: MikroOrmReserveRepository,

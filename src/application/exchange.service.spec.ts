@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Currency } from '../domain/core/currency/currency';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 import { InMemoryReserveRepository } from '../infrastructure/persistence/memory/in-memory-reserve.repository';
-import { ReserveGateway } from '../interfaces/websocket/reserve.gateway';
+import { EventEmitter2 } from 'eventemitter2';
 import { ExchangeService } from './exchange.service';
 
 describe('ExchangeService', () => {
@@ -20,12 +20,7 @@ describe('ExchangeService', () => {
           provide: IReserveRepository,
           useClass: InMemoryReserveRepository,
         },
-        {
-          provide: ReserveGateway,
-          useValue: {
-            notifyReserveChange: jest.fn(),
-          },
-        },
+        EventEmitter2,
       ],
     }).compile();
 
