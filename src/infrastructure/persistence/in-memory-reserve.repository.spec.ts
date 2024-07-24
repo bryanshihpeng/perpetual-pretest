@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Currency } from '../../domain/core/currency/currency';
+import { Money } from '../../domain/core/currency/money';
 import { InMemoryReserveRepository } from './in-memory-reserve.repository';
 
 describe('InMemoryReserveRepository', () => {
@@ -40,10 +41,9 @@ describe('InMemoryReserveRepository', () => {
       const usdCurrency = new Currency('US Dollar', 'USD', 2);
       const initialReserve = await repository.getReserve(usdCurrency);
       const newAmount = 15000;
-      initialReserve.add({
-        currency: usdCurrency,
-        amount: newAmount - initialReserve.amount,
-      });
+      initialReserve.add(
+        new Money(usdCurrency, newAmount - initialReserve.amount)
+      );
       await repository.updateReserve(initialReserve);
 
       const updatedReserve = await repository.getReserve(usdCurrency);
