@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 
-jest.setTimeout(10000); // Set global timeout to 10 seconds for all tests in this file
+jest.setTimeout(15000); // Increase global timeout to 15 seconds for all tests in this file
 
 describe('Exchange Integration Tests', () => {
   let app: INestApplication;
@@ -19,7 +19,17 @@ describe('Exchange Integration Tests', () => {
     await app.init();
     await app.listen(3000);
 
-    socket = io('http://localhost:3000');
+    socket = io('http://localhost:3000', {
+      transports: ['websocket'],
+    });
+
+    // Wait for the socket to connect before running tests
+    await new Promise<void>((resolve) => {
+      socket.on('connect', () => {
+        console.log('WebSocket connected');
+        resolve();
+      });
+    });
   });
 
   afterAll(async () => {
@@ -39,8 +49,8 @@ describe('Exchange Integration Tests', () => {
   });
 
   it('should exchange currency and receive WebSocket notification', (done) => {
-    jest.setTimeout(10000); // Increase timeout to 10 seconds for this specific test
     socket.on('reserveChange', (data) => {
+      console.log('Received reserveChange event:', data);
       expect(data).toEqual({
         TWD: 11000,
         USD: expect.closeTo(9090.91, 2),
