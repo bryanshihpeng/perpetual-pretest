@@ -1,13 +1,20 @@
-import { WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import {
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  WebSocketGateway,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
-export class ReserveGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ReserveGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   private readonly logger = new Logger(ReserveGateway.name);
 
   @WebSocketServer()
@@ -22,7 +29,9 @@ export class ReserveGateway implements OnGatewayConnection, OnGatewayDisconnect 
   }
 
   notifyReserveChange(reserves: { [key: string]: number }) {
-    this.logger.log(`Emitting reserveChange event: ${JSON.stringify(reserves)}`);
+    this.logger.log(
+      `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
+    );
     this.server.emit('reserveChange', reserves);
   }
 }

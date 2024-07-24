@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { Currency } from '../domain/core/currency/currency';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
-import { ExchangeService } from './exchange.service';
-import { InMemoryReserveRepository } from '../infrastructure/persistence/in-memory-reserve.repository';
+import { InMemoryReserveRepository } from '../infrastructure/persistence/memory/in-memory-reserve.repository';
 import { ReserveGateway } from '../interfaces/websocket/reserve.gateway';
+import { ExchangeService } from './exchange.service';
 
 describe('ExchangeService', () => {
   let service: ExchangeService;

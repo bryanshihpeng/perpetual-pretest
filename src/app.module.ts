@@ -1,24 +1,21 @@
-import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Module } from '@nestjs/common';
 import { ExchangeService } from './application/exchange.service';
 import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
-import { PostgresReserveRepository } from './infrastructure/persistence/postgres-reserve.repository';
+import { MikroOrmReserveRepository } from './infrastructure/persistence/mikro-orm/mikro-orm-reserve.repository';
+import { Reserve } from './infrastructure/persistence/mikro-orm/reserve.entity';
 import { ExchangeController } from './interfaces/http/exchange.controller';
 import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
-import { Reserve } from './infrastructure/persistence/entities/reserve.entity';
 
 @Module({
-  imports: [
-    MikroOrmModule.forRoot(),
-    MikroOrmModule.forFeature([Reserve]),
-  ],
+  imports: [MikroOrmModule.forRoot(), MikroOrmModule.forFeature([Reserve])],
   controllers: [ExchangeController],
   providers: [
     ExchangeService,
     ReserveGateway,
     {
       provide: IReserveRepository,
-      useClass: PostgresReserveRepository,
+      useClass: MikroOrmReserveRepository,
     },
   ],
 })
