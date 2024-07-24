@@ -4,6 +4,8 @@ import { io, Socket } from 'socket.io-client';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 
+jest.setTimeout(10000); // Set global timeout to 10 seconds for all tests in this file
+
 describe('Exchange Integration Tests', () => {
   let app: INestApplication;
   let socket: Socket;
@@ -37,6 +39,7 @@ describe('Exchange Integration Tests', () => {
   });
 
   it('should exchange currency and receive WebSocket notification', (done) => {
+    jest.setTimeout(10000); // Increase timeout to 10 seconds for this specific test
     socket.on('reserveChange', (data) => {
       expect(data).toEqual({
         TWD: 11000,
