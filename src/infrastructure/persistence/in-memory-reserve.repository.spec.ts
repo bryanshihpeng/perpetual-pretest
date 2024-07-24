@@ -10,7 +10,9 @@ describe('InMemoryReserveRepository', () => {
       providers: [InMemoryReserveRepository],
     }).compile();
 
-    repository = module.get<InMemoryReserveRepository>(InMemoryReserveRepository);
+    repository = module.get<InMemoryReserveRepository>(
+      InMemoryReserveRepository,
+    );
   });
 
   it('should be defined', () => {
@@ -27,7 +29,9 @@ describe('InMemoryReserveRepository', () => {
 
     it('should throw an error for an unsupported currency', async () => {
       const eurCurrency = new Currency('Euro', 'EUR', 2);
-      await expect(repository.getReserve(eurCurrency)).rejects.toThrow('Unsupported currency');
+      await expect(repository.getReserve(eurCurrency)).rejects.toThrow(
+        'Unsupported currency',
+      );
     });
   });
 
@@ -36,7 +40,10 @@ describe('InMemoryReserveRepository', () => {
       const usdCurrency = new Currency('US Dollar', 'USD', 2);
       const initialReserve = await repository.getReserve(usdCurrency);
       const newAmount = 15000;
-      initialReserve.add({ currency: usdCurrency, amount: newAmount - initialReserve.amount });
+      initialReserve.add({
+        currency: usdCurrency,
+        amount: newAmount - initialReserve.amount,
+      });
       await repository.updateReserve(initialReserve);
 
       const updatedReserve = await repository.getReserve(usdCurrency);
