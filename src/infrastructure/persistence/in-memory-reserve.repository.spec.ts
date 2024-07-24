@@ -42,7 +42,7 @@ describe('InMemoryReserveRepository', () => {
       const initialReserve = await repository.getReserve(usdCurrency);
       const newAmount = 15000;
       initialReserve.add(
-        new Money(usdCurrency, newAmount - initialReserve.amount)
+        new Money(usdCurrency, newAmount - initialReserve.amount),
       );
       await repository.updateReserve(initialReserve);
 

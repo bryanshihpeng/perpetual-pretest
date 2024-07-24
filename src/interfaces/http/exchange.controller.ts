@@ -23,7 +23,7 @@ export class ExchangeController {
   ) {}
 
   @Post(':from/:to')
-  async trade(
+  async exchange(
     @Param('from') from: string,
     @Param('to') to: string,
     @Body() tradeDto: TradeDto,
