@@ -5,7 +5,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { EventEmitter2 } from 'eventemitter2';
+import { OnEvent } from '@nestjs/event-emitter';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -18,8 +18,6 @@ export class ReserveGateway
 {
   private readonly logger = new Logger(ReserveGateway.name);
 
-  constructor(private eventEmitter: EventEmitter2) {}
-
   @WebSocketServer()
   server: Server;
 
@@ -31,15 +29,11 @@ export class ReserveGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  afterInit() {
-    this.eventEmitter.on(
-      'reserveChange',
-      (reserves: { [key: string]: number }) => {
-        this.logger.log(
-          `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
-        );
-        this.server.emit('reserveChange', reserves);
-      },
+  @OnEvent('reserveChange')
+  handleReserveChangeEvent(reserves: { [key: string]: number }) {
+    this.logger.log(
+      `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
     );
+    this.server.emit('reserveChange', reserves);
   }
 }

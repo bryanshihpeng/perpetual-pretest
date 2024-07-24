@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { EventEmitter2 } from 'eventemitter2';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';

@@ -33,7 +33,7 @@
     "class-validator": "^0.14.1",
     "currency.js": "^2.0.4",
     "dinero.js": "^1.9.1",
-    "eventemitter2": "^6.4.9",
+    "@nestjs/event-emitter": "^2.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "socket.io": "^4.7.2"

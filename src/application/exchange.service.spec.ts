@@ -1,31 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
 import { Currency } from '../domain/core/currency/currency';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 import { InMemoryReserveRepository } from '../infrastructure/persistence/memory/in-memory-reserve.repository';
-import { EventEmitter2 } from 'eventemitter2';
 import { ExchangeService } from './exchange.service';
 
 describe('ExchangeService', () => {
   let service: ExchangeService;
   let reserveRepository: IReserveRepository;
+  let eventEmitter: EventEmitter2;
 
   const twdCurrency = new Currency('New Taiwan Dollar', 'TWD', 0);
   const usdCurrency = new Currency('US Dollar', 'USD', 2);
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [EventEmitterModule.forRoot()],
       providers: [
         ExchangeService,
         {
           provide: IReserveRepository,
           useClass: InMemoryReserveRepository,
         },
-        EventEmitter2,
       ],
     }).compile();
 
     service = module.get<ExchangeService>(ExchangeService);
     reserveRepository = module.get<IReserveRepository>(IReserveRepository);
+    eventEmitter = module.get<EventEmitter2>(EventEmitter2);
   });
 
   it('should be defined', () => {
@@ -33,7 +35,8 @@ describe('ExchangeService', () => {
   });
 
   describe('exchange', () => {
-    it('should exchange currency successfully', async () => {
+    it('should exchange currency successfully and emit event', async () => {
+      const emitSpy = jest.spyOn(eventEmitter, 'emit');
       const result = await service.exchange(twdCurrency, usdCurrency, 1000);
 
       expect(result).toBeCloseTo(909.09, 2);
@@ -43,6 +46,8 @@ describe('ExchangeService', () => {
 
       expect(twdReserve.amount).toBe(11000);
       expect(usdReserve.amount).toBeCloseTo(9090.91, 2);
+
+      expect(emitSpy).toHaveBeenCalledWith('reserveChange', expect.any(Object));
     });
 
     it('should throw an error if trade amount is not positive', async () => {
