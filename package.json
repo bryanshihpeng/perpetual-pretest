@@ -24,6 +24,7 @@
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@types/dinero.js": "^1.9.4",
+    "class-validator": "^0.14.1",
     "currency.js": "^2.0.4",
     "dinero.js": "^1.9.1",
     "reflect-metadata": "^0.2.0",

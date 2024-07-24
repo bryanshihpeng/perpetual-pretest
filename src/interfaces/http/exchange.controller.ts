@@ -5,7 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Param,
+  Inject,
   Post,
   UseInterceptors,
 } from '@nestjs/common';
@@ -19,7 +19,7 @@ import { IReserveRepository } from '../../domain/reserve/reserve.repository.inte
 export class ExchangeController {
   constructor(
     private readonly exchangeService: ExchangeService,
-    private reserveRepository: IReserveRepository,
+    @Inject(IReserveRepository) private reserveRepository: IReserveRepository,
   ) {}
 
   @Post()
