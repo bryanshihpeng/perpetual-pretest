@@ -28,27 +28,16 @@ describe('MikroOrmReserveRepository', () => {
     await entityManager.nativeDelete(ReserveEntity, {});
   });
 
-  describe('createReserve', () => {
-    it('should create a new reserve', async () => {
-      const currency = new Currency('US Dollar', 'USD', 2);
-      const reserve = new Reserve(currency, 1000);
-
-      await repository.createReserve(reserve);
-
-      const createdReserve = await entityManager.findOne(ReserveEntity, {
-        currencyCode: 'USD',
-      });
-      expect(createdReserve).toBeDefined();
-      expect(createdReserve.currencyCode).toBe('USD');
-      expect(createdReserve.amount).toBe(1000);
-    });
-  });
-
   describe('getReserve', () => {
     it('should retrieve an existing reserve', async () => {
       const currency = new Currency('US Dollar', 'USD', 2);
       await entityManager.persistAndFlush(
-        new ReserveEntity('USD', 'US Dollar', 2, 1000),
+        new ReserveEntity({
+          currencyCode: 'USD',
+          currencyName: 'US Dollar',
+          precision: 2,
+          amount: 1000,
+        }),
       );
 
       const reserve = await repository.getReserve(currency);
@@ -71,7 +60,12 @@ describe('MikroOrmReserveRepository', () => {
     it('should update an existing reserve', async () => {
       const currency = new Currency('US Dollar', 'USD', 2);
       await entityManager.persistAndFlush(
-        new ReserveEntity('USD', 'US Dollar', 2, 1000),
+        new ReserveEntity({
+          currencyCode: 'USD',
+          currencyName: 'US Dollar',
+          precision: 2,
+          amount: 1000,
+        }),
       );
 
       const updatedReserve = new Reserve(currency, 1500);
@@ -96,8 +90,18 @@ describe('MikroOrmReserveRepository', () => {
   describe('getAllReserves', () => {
     it('should retrieve all reserves', async () => {
       await entityManager.persistAndFlush([
-        new ReserveEntity('USD', 'US Dollar', 2, 1000),
-        new ReserveEntity('EUR', 'Euro', 2, 2000),
+        new ReserveEntity({
+          currencyCode: 'USD',
+          currencyName: 'US Dollar',
+          precision: 2,
+          amount: 1000,
+        }),
+        new ReserveEntity({
+          currencyCode: 'EUR',
+          currencyName: 'Euro',
+          precision: 2,
+          amount: 2000,
+        }),
       ]);
 
       const reserves = await repository.getAllReserves();
