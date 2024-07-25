@@ -9,6 +9,7 @@ import { IReserveRepository } from '../domain/reserve/reserve.repository.interfa
 @Injectable()
 export class ExchangeService {
   private readonly logger = new Logger(ExchangeService.name);
+  private readonly MAX_RETRIES = 3;
 
   constructor(
     @Inject(IReserveRepository)
@@ -23,42 +24,55 @@ export class ExchangeService {
     toCurrency: Currency,
     fromCurrencyAmount: number,
   ): Promise<number> {
-    return this.transactionManager.runInTransaction(async () => {
-      if (fromCurrencyAmount <= 0) {
-        throw new Error('Trade amount must be positive');
+    let retries = 0;
+    while (retries < this.MAX_RETRIES) {
+      try {
+        return await this.transactionManager.runInTransaction(async () => {
+          if (fromCurrencyAmount <= 0) {
+            throw new Error('Trade amount must be positive');
+          }
+
+          const money = new Money(fromCurrency, fromCurrencyAmount);
+
+          const fromReserve = await this.reserveRepository.getReserve(fromCurrency);
+          const toReserve = await this.reserveRepository.getReserve(toCurrency);
+
+          const toReserveSubtraction =
+            ExchangeRateCalculator.calculateExchangeAmount(
+              fromReserve,
+              toReserve,
+              fromCurrencyAmount,
+            );
+
+          if (toReserve.amount <= toReserveSubtraction.amount) {
+            throw new Error('Insufficient reserve for the trade');
+          }
+
+          fromReserve.add(money);
+          toReserve.subtract(toReserveSubtraction);
+
+          await this.reserveRepository.updateReserve(fromReserve);
+          await this.reserveRepository.updateReserve(toReserve);
+
+          this.logger.log(
+            `Trade executed: ${fromCurrencyAmount} ${fromCurrency.code} to ${toReserveSubtraction.amount} ${toCurrency.code}`,
+          );
+
+          // Emit event about the reserve change
+          const updatedReserves = await this.reserveRepository.getAllReserves();
+          this.eventEmitter.emit('reserveChange', updatedReserves);
+
+          return toReserveSubtraction.amount;
+        });
+      } catch (error) {
+        if (error.name === 'UniqueConstraintViolationException' || error.name === 'LockWaitTimeoutException') {
+          retries++;
+          this.logger.warn(`Retrying transaction (attempt ${retries})`);
+        } else {
+          throw error;
+        }
       }
-
-      const money = new Money(fromCurrency, fromCurrencyAmount);
-
-      const fromReserve = await this.reserveRepository.getReserve(fromCurrency);
-      const toReserve = await this.reserveRepository.getReserve(toCurrency);
-
-      const toReserveSubtraction =
-        ExchangeRateCalculator.calculateExchangeAmount(
-          fromReserve,
-          toReserve,
-          fromCurrencyAmount,
-        );
-
-      if (toReserve.amount <= toReserveSubtraction.amount) {
-        throw new Error('Insufficient reserve for the trade');
-      }
-
-      fromReserve.add(money);
-      toReserve.subtract(toReserveSubtraction);
-
-      await this.reserveRepository.updateReserve(fromReserve);
-      await this.reserveRepository.updateReserve(toReserve);
-
-      this.logger.log(
-        `Trade executed: ${fromCurrencyAmount} ${fromCurrency.code} to ${toReserveSubtraction.amount} ${toCurrency.code}`,
-      );
-
-      // Emit event about the reserve change
-      const updatedReserves = await this.reserveRepository.getAllReserves();
-      this.eventEmitter.emit('reserveChange', updatedReserves);
-
-      return toReserveSubtraction.amount;
-    });
+    }
+    throw new Error('Max retries reached. Unable to complete the transaction.');
   }
 }
