@@ -1,9 +1,11 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { ExchangeService } from './application/exchange.service';
-import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
 import { ITransactionManager } from './domain/core/transaction/transaction.interface';
+import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
 import { InMemoryReserveRepository } from './infrastructure/persistence/memory/in-memory-reserve.repository';
 import { InMemoryTransactionManager } from './infrastructure/persistence/memory/in-memory-transaction-manager';
 import { MikroOrmTransactionManager } from './infrastructure/persistence/mikro-orm/mikro-orm-transaction-manager';
@@ -17,6 +19,18 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
       ...dbConfig,
     }),
     EventEmitterModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(
+        __dirname,
+        '..',
+        'src',
+        'interfaces',
+        'http',
+        'client',
+        'build',
+      ),
+      exclude: ['/api*'],
+    }),
   ],
   controllers: [ExchangeController],
   providers: [
@@ -28,7 +42,10 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
     },
     {
       provide: ITransactionManager,
-      useClass: process.env.NODE_ENV === 'test' ? InMemoryTransactionManager : MikroOrmTransactionManager,
+      useClass:
+        process.env.NODE_ENV === 'test'
+          ? InMemoryTransactionManager
+          : MikroOrmTransactionManager,
     },
   ],
 })

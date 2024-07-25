@@ -1,8 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { EventEmitter2, EventEmitterModule } from '@nestjs/event-emitter';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Currency } from '../domain/core/currency/currency';
+import { ITransactionManager } from '../domain/core/transaction/transaction-manager.interface';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 import { InMemoryReserveRepository } from '../infrastructure/persistence/memory/in-memory-reserve.repository';
+import { InMemoryTransactionManager } from '../infrastructure/persistence/memory/in-memory-transaction-manager';
 import { ExchangeService } from './exchange.service';
 
 describe('ExchangeService', () => {
@@ -21,6 +23,10 @@ describe('ExchangeService', () => {
         {
           provide: IReserveRepository,
           useClass: InMemoryReserveRepository,
+        },
+        {
+          provide: ITransactionManager,
+          useClass: InMemoryTransactionManager,
         },
       ],
     }).compile();

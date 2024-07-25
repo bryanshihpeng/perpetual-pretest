@@ -42,4 +42,11 @@ export class Money {
   toString(): string {
     return `${this.amount} ${this.currency.code}`;
   }
+
+  divide(divisor: number): Money {
+    if (divisor === 0) {
+      throw new Error('Cannot divide by zero');
+    }
+    return this.createNew(this._amount.divide(divisor));
+  }
 }

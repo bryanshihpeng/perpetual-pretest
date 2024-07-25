@@ -2,10 +2,9 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
-import {
-  IsolationLevel,
-  ITransactionManager,
-} from '../domain/core/transaction/transaction.interface';
+import { IsolationLevel } from '../domain/core/transaction/isolation-level.enum';
+import { ITransactionManager } from '../domain/core/transaction/transaction-manager.interface';
+
 import { EventNames } from '../domain/events/event-names';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
@@ -53,8 +52,8 @@ export class ExchangeService {
             throw new Error('Insufficient reserve for the trade');
           }
 
-          fromReserve.add(money);
-          toReserve.subtract(toReserveSubtraction);
+          fromReserve.subtract(money);
+          toReserve.add(toReserveSubtraction);
 
           await this.reserveRepository.updateReserve(fromReserve);
           await this.reserveRepository.updateReserve(toReserve);
