@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { DecimalType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class ReserveEntity {
@@ -11,6 +11,6 @@ export class ReserveEntity {
   @Property()
   precision!: number;
 
-  @Property()
+  @Property({ type: DecimalType })
   amount!: number;
 }
