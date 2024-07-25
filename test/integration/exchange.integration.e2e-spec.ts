@@ -42,10 +42,12 @@ describe('Exchange Integration Tests', () => {
       '/exchange/reserves',
     );
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({
-      TWD: 10000,
-      USD: 10000,
-    });
+    expect(response.body).toBeDefined();
+    expect(response.body['USD']).toBeDefined();
+    expect(response.body['TWD']).toBeDefined();
+
+    expect(response.body['USD']).toBe(10000);
+    expect(response.body['TWD']).toBe(10000);
   });
 
   it('should exchange currency and receive WebSocket notification', (done) => {

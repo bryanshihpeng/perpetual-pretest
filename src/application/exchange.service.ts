@@ -2,7 +2,10 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
-import { ITransactionManager } from '../domain/core/transaction/transaction.interface';
+import {
+  IsolationLevel,
+  ITransactionManager,
+} from '../domain/core/transaction/transaction.interface';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 
@@ -19,12 +22,6 @@ export class ExchangeService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  // Using Serializable isolation level for the following reasons:
-  // 1. Currency exchange operations involve simultaneous changes to multiple reserves, requiring strong data consistency.
-  // 2. In high-concurrency scenarios, lower isolation levels may lead to frequent transaction conflicts and retries, potentially reducing overall efficiency.
-  // 3. Serializable isolation ensures transactions are executed in order, avoiding complex conflict resolution logic.
-  // 4. While it may slightly impact performance, data accuracy is more critical than performance in financial transactions.
-  // 5. In situations where conflicts are expected to be common, using the highest isolation level can reduce the number of retries, potentially improving overall throughput.
   async exchange(
     fromCurrency: Currency,
     toCurrency: Currency,
@@ -66,11 +63,16 @@ export class ExchangeService {
           );
 
           // Emit event about the reserve change
-          const updatedReserves = await this.reserveRepository.getAllReserves();
-          this.eventEmitter.emit('reserveChange', updatedReserves);
+          this.eventEmitter.emit('reserveChange', [fromReserve, toReserve]);
 
           return toReserveSubtraction.amount;
-        });
+          // Using Serializable isolation level for the following reasons:
+          // 1. Currency exchange operations involve simultaneous changes to multiple reserves, requiring strong data consistency.
+          // 2. In high-concurrency scenarios, lower isolation levels may lead to frequent transaction conflicts and retries, potentially reducing overall efficiency.
+          // 3. Serializable isolation ensures transactions are executed in order, avoiding complex conflict resolution logic.
+          // 4. While it may slightly impact performance, data accuracy is more critical than performance in financial transactions.
+          // 5. In situations where conflicts are expected to be common, using the highest isolation level can reduce the number of retries, potentially improving overall throughput.
+        }, IsolationLevel.SERIALIZABLE);
       } catch (error) {
         if (
           error.name === 'UniqueConstraintViolationException' ||

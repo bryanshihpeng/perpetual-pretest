@@ -10,11 +10,12 @@ export class MikroOrmReserveRepository implements IReserveRepository {
   constructor(private readonly em: EntityManager) {}
 
   async createReserve(domainReserve: DomainReserve): Promise<void> {
-    const reserve = new ReserveEntity();
-    reserve.currencyCode = domainReserve.currency.code;
-    reserve.currencyName = domainReserve.currency.name;
-    reserve.precision = domainReserve.currency.precision;
-    reserve.amount = domainReserve.amount;
+    const reserve = new ReserveEntity({
+      currencyCode: domainReserve.currency.code,
+      currencyName: domainReserve.currency.name,
+      precision: domainReserve.currency.precision,
+      amount: domainReserve.amount,
+    });
     await this.em.persistAndFlush(reserve);
   }
 

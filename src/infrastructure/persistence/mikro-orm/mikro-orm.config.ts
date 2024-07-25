@@ -2,7 +2,6 @@ import { Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import * as dotenv from 'dotenv';
 import { ReserveEntity } from './reserve.entity';
-import { ReserveSeeder } from './seeders/ReserveSeeder';
 
 dotenv.config();
 
@@ -14,6 +13,7 @@ const mikroOrmConfig: Options = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   dbName: process.env.DB_NAME,
+  allowGlobalContext: true,
   driverOptions: {
     connection: { ssl: process.env.DB_USE_SSL === 'true' },
   },

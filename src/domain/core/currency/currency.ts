@@ -7,6 +7,6 @@ export class Currency {
 }
 
 export const currencies = {
-  TWD: new Currency('New Taiwan Dollar', 'TWD', 2),
+  TWD: new Currency('New Taiwan Dollar', 'TWD', 0),
   USD: new Currency('US Dollar', 'USD', 2),
 };
