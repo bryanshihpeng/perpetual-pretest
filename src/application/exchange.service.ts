@@ -19,6 +19,12 @@ export class ExchangeService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
+  // Using Serializable isolation level for the following reasons:
+  // 1. Currency exchange operations involve simultaneous changes to multiple reserves, requiring strong data consistency.
+  // 2. In high-concurrency scenarios, lower isolation levels may lead to frequent transaction conflicts and retries, potentially reducing overall efficiency.
+  // 3. Serializable isolation ensures transactions are executed in order, avoiding complex conflict resolution logic.
+  // 4. While it may slightly impact performance, data accuracy is more critical than performance in financial transactions.
+  // 5. In situations where conflicts are expected to be common, using the highest isolation level can reduce the number of retries, potentially improving overall throughput.
   async exchange(
     fromCurrency: Currency,
     toCurrency: Currency,
