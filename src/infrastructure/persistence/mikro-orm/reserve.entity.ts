@@ -1,11 +1,8 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
-export class Reserve {
+export class ReserveEntity {
   @PrimaryKey()
-  id!: number;
-
-  @Property()
   currencyCode!: string;
 
   @Property()

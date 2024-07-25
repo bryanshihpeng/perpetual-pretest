@@ -19,26 +19,34 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/infrastructure/persistence/mikro-orm/mikro-orm.config.ts"
+    ]
+  },
   "dependencies": {
+    "@mikro-orm/core": "^6.3.0",
+    "@mikro-orm/migrations": "^6.3.0",
+    "@mikro-orm/nestjs": "^5.1.8",
+    "@mikro-orm/postgresql": "^6.3.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/event-emitter": "^2.0.0",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.3.10",
     "@nestjs/websockets": "^10.0.0",
-    "@mikro-orm/core": "^5.7.12",
-    "@mikro-orm/nestjs": "^5.1.8",
-    "@mikro-orm/postgresql": "^5.7.12",
     "@types/dinero.js": "^1.9.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "currency.js": "^2.0.4",
     "dinero.js": "^1.9.1",
-    "@nestjs/event-emitter": "^2.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "socket.io": "^4.7.2"
   },
   "devDependencies": {
+    "@mikro-orm/cli": "^6.3.0",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",

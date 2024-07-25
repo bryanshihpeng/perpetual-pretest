@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Currency } from '../../domain/core/currency/currency';
-import { Reserve } from '../../domain/reserve/reserve.aggregate-root';
-import { IReserveRepository } from '../../domain/reserve/reserve.repository.interface';
+import { Currency } from '../../../domain/core/currency/currency';
+import { Reserve } from '../../../domain/reserve/reserve.aggregate-root';
+import { IReserveRepository } from '../../../domain/reserve/reserve.repository.interface';
 
 @Injectable()
 export class InMemoryReserveRepository implements IReserveRepository {

@@ -4,14 +4,15 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ExchangeService } from './application/exchange.service';
 import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
 import { MikroOrmReserveRepository } from './infrastructure/persistence/mikro-orm/mikro-orm-reserve.repository';
-import { Reserve } from './infrastructure/persistence/mikro-orm/reserve.entity';
+import dbConfig from './infrastructure/persistence/mikro-orm/mikro-orm.config';
 import { ExchangeController } from './interfaces/http/exchange.controller';
 import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
 
 @Module({
   imports: [
-    MikroOrmModule.forRoot(),
-    MikroOrmModule.forFeature([Reserve]),
+    MikroOrmModule.forRoot({
+      ...dbConfig,
+    }),
     EventEmitterModule.forRoot(),
   ],
   controllers: [ExchangeController],

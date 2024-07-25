@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Currency } from '../../domain/core/currency/currency';
-import { Money } from '../../domain/core/currency/money';
+import { Currency } from '../../../domain/core/currency/currency';
+import { Money } from '../../../domain/core/currency/money';
 import { InMemoryReserveRepository } from './in-memory-reserve.repository';
 
 describe('InMemoryReserveRepository', () => {
