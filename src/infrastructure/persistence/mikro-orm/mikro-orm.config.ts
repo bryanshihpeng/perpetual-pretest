@@ -2,6 +2,7 @@ import { Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import * as dotenv from 'dotenv';
 import { ReserveEntity } from './reserve.entity';
+import { ReserveSeeder } from './seeders/ReserveSeeder';
 
 dotenv.config();
 
@@ -18,6 +19,14 @@ const mikroOrmConfig: Options = {
   },
   migrations: {
     path: './src/infrastructure/persistence/mikro-orm/migrations',
+  },
+  seeder: {
+    path: './src/infrastructure/persistence/mikro-orm/seeders',
+    pathTs: './src/infrastructure/persistence/mikro-orm/seeders',
+    defaultSeeder: 'ReserveSeeder',
+    glob: '!(*.d).{js,ts}',
+    emit: 'ts',
+    fileName: (className: string) => className,
   },
 };
 
