@@ -28,17 +28,4 @@ export class ExchangeRateCalculator {
     // Round down to ensure we don't over-promise
     return new Money(toReserve.currency, Math.floor(-y.value * 100) / 100);
   }
-
-  static calculateExchangeRate(
-    fromReserve: Reserve,
-    toReserve: Reserve,
-    amount: number,
-  ) {
-    const exchangeAmount = this.calculateExchangeAmount(
-      fromReserve,
-      toReserve,
-      amount,
-    );
-    return exchangeAmount.divide(amount);
-  }
 }

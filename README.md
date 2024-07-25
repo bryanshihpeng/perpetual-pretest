@@ -1,73 +1,89 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Currency Exchange Application
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to the Currency Exchange Application, a cutting-edge solution built with the [Nest](https://github.com/nestjs/nest) framework. This application is designed to provide seamless currency exchange services with real-time updates and a user-friendly interface.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🚀 Description
 
-## Description
+This project is a sophisticated currency exchange platform that offers:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **API for Currency Exchange**: Calculate and perform currency exchanges with ease.
+- **Real-time Updates**: Stay updated with the latest currency reserves through WebSockets.
+- **Interactive Front-end**: A sleek React-based interface for an enhanced user experience.
 
-## Installation
+The application leverages Domain-Driven Design (DDD) principles and supports both in-memory and PostgreSQL databases. For testing convenience, the default mode is in-memory, but you can easily switch the repository implementation in `src/app.module`.
+
+## 🛠️ Installation
+
+Get started with the following commands:
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+## 🚀 Running the Application
+
+Choose your preferred mode to run the application:
+
+### Development Mode
 
 ```bash
-# development
 $ npm run start
+```
 
-# watch mode
+### Watch Mode
+
+```bash
 $ npm run start:dev
+```
 
-# production mode
+### Production Mode
+
+```bash
 $ npm run start:prod
 ```
 
-## Test
+## 🧪 Testing
+
+Ensure the robustness of the application with these commands:
+
+### Unit Tests
 
 ```bash
-# unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+### End-to-End Tests
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+$ npm run test:e2e
+```
 
-## Stay in touch
+## 🌟 Features
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Currency Exchange API**: Endpoints for calculating and performing currency exchanges.
+- **Real-time Updates**: WebSocket integration for live updates of currency reserves.
+- **Front-end Interface**: A React-based interface for user interactions.
 
-## License
+## 🛠️ Technologies Used
 
-Nest is [MIT licensed](LICENSE).
+- **Backend**: NestJS, TypeScript, MikroORM, PostgreSQL, EventEmitter, DDD
+- **Frontend**: React, Axios, Socket.IO
+- **Testing**: Jest
+
+## 📚 Documentation
+
+For detailed documentation, please refer to the [official NestJS documentation](https://docs.nestjs.com/).
+
+## 🤝 Contributing
+
+We welcome contributions! Please fork the repository and submit your pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## 📧 Contact
+
+For any inquiries, please contact us at [support@currencyexchange.com](mailto:support@currencyexchange.com).
+
+Thank you for using the Currency Exchange Application! We hope it meets all your currency exchange needs.

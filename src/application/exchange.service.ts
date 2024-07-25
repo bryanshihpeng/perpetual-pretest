@@ -4,9 +4,9 @@ import { Currency } from '../domain/core/currency/currency';
 import { Money } from '../domain/core/currency/money';
 import { IsolationLevel } from '../domain/core/transaction/isolation-level.enum';
 import { ITransactionManager } from '../domain/core/transaction/transaction-manager.interface';
-
-import { EventNames } from '../domain/events/event-names';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
+
+import { EventNames } from '../domain/reserve/events/event-names';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 
 @Injectable()
@@ -39,6 +39,10 @@ export class ExchangeService {
 
           const fromReserve =
             await this.reserveRepository.getReserve(fromCurrency);
+
+          if (fromReserve.amount <= money.amount) {
+            throw new Error('Insufficient reserve for the trade');
+          }
           const toReserve = await this.reserveRepository.getReserve(toCurrency);
 
           const toReserveSubtraction =
@@ -52,8 +56,8 @@ export class ExchangeService {
             throw new Error('Insufficient reserve for the trade');
           }
 
-          fromReserve.subtract(money);
-          toReserve.add(toReserveSubtraction);
+          fromReserve.add(money);
+          toReserve.subtract(toReserveSubtraction);
 
           await this.reserveRepository.updateReserve(fromReserve);
           await this.reserveRepository.updateReserve(toReserve);

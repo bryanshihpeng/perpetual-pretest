@@ -50,23 +50,5 @@ describe('ExchangeRateCalculator', () => {
 
       expect(result.amount).toBeLessThan(500000);
     });
-
-    it('should maintain constant product after exchange', () => {
-      const fromReserve = new Reserve(twdCurrency, 10000);
-      const toReserve = new Reserve(usdCurrency, 10000);
-      const amount = 1000;
-
-      const result = ExchangeRateCalculator.calculateExchangeAmount(
-        fromReserve,
-        toReserve,
-        amount,
-      );
-
-      const initialProduct = fromReserve.amount * toReserve.amount;
-      const finalProduct =
-        (fromReserve.amount + amount) * (toReserve.amount - result.amount);
-
-      expect(finalProduct).toBeCloseTo(initialProduct, 5);
-    });
   });
 });

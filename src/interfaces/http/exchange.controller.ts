@@ -32,8 +32,10 @@ export class ExchangeController {
         exchangeDto.amount,
       );
       return {
-        statusCode: HttpStatus.CREATED,
-        [exchangeDto.to.toLowerCase() + 'Amount']: result,
+        fromCurrency: fromCurrency.code,
+        toCurrency: toCurrency.code,
+        fromAmount: exchangeDto.amount,
+        toAmount: result,
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

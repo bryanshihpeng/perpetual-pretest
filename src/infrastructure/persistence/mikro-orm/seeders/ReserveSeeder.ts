@@ -21,7 +21,9 @@ export class ReserveSeeder extends Seeder {
     ];
 
     for (const reserve of reserves) {
-      const existingReserve = await em.findOne(ReserveEntity, { currencyCode: reserve.currencyCode });
+      const existingReserve = await em.findOne(ReserveEntity, {
+        currencyCode: reserve.currencyCode,
+      });
       if (!existingReserve) {
         em.create(ReserveEntity, reserve);
       }

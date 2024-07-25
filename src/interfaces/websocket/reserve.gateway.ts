@@ -1,14 +1,14 @@
-import { Logger, Inject } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  SubscribeMessage,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { EventNames } from '../../domain/events/event-names';
+import { EventNames } from '../../domain/reserve/events/event-names';
 import { Reserve } from '../../domain/reserve/reserve.aggregate-root';
 import { IReserveRepository } from '../../domain/reserve/reserve.repository.interface';
 

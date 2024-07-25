@@ -37,16 +37,25 @@ function App() {
     const calculateEstimatedResult = async () => {
       if (amount && from && to) {
         try {
-          const response = await calculateExchangeRate(from, to, amount);
-          if (response.error) {
-            alert(`Error calculating estimated result: ${response.error}`);
-            setEstimatedResult(null);
+          const fromReserve = reserves[from];
+          const toReserve = reserves[to];
+          if (fromReserve && toReserve) {
+            const result = ExchangeRateCalculator.calculateExchangeAmount(
+              fromReserve,
+              toReserve,
+              parseFloat(amount),
+            );
+            if (!isNaN(result)) {
+              const rate = result / parseFloat(amount);
+              setEstimatedResult({
+                amount: result.toFixed(2),
+                rate: rate.toFixed(4),
+              });
+            } else {
+              setEstimatedResult(null);
+            }
           } else {
-            const { estimatedAmount, rate } = response;
-            setEstimatedResult({
-              amount: estimatedAmount.toFixed(2),
-              rate: rate.toFixed(4),
-            });
+            setEstimatedResult(null);
           }
         } catch (error) {
           console.error('Error calculating estimated result:', error);
@@ -58,8 +67,8 @@ function App() {
     };
 
     if (amount && from && to) {
-      const debounceTimer = setTimeout(() => {
-        calculateEstimatedResult();
+      const debounceTimer = setTimeout(async () => {
+        await calculateEstimatedResult();
       }, 300);
 
       return () => clearTimeout(debounceTimer);
@@ -73,13 +82,16 @@ function App() {
       if (result.error) {
         alert(`Error during exchange: ${result.error}`);
       } else {
+        console.log('Exchange result:', result);
         const actualAmount = result.toAmount;
         setTransactions((prevTransactions) => [
           {
             from,
             to,
             amount: parseFloat(amount),
-            expectedAmount: estimatedResult ? parseFloat(estimatedResult.amount) : 0,
+            expectedAmount: estimatedResult
+              ? parseFloat(estimatedResult.amount)
+              : 0,
             actualAmount: parseFloat(actualAmount),
             timestamp: new Date().toLocaleString(),
           },
@@ -190,7 +202,10 @@ function App() {
             <tbody>
               {transactions.map((transaction, index) => (
                 <tr key={index}>
-                  <td>from {transaction.amount.toFixed(2)} {transaction.from} to {transaction.expectedAmount.toFixed(2)} {transaction.to}</td>
+                  <td>
+                    from {transaction.amount.toFixed(2)} {transaction.from} to{' '}
+                    {transaction.expectedAmount.toFixed(2)} {transaction.to}
+                  </td>
                   <td>{transaction.expectedAmount.toFixed(2)}</td>
                   <td>{transaction.actualAmount.toFixed(2)}</td>
                   <td>{transaction.timestamp}</td>

@@ -15,9 +15,9 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
 
 @Module({
   imports: [
-    MikroOrmModule.forRoot({
-      ...dbConfig,
-    }),
+    ...(process.env.NODE_ENV === 'production'
+      ? [MikroOrmModule.forRoot({ ...dbConfig })]
+      : []),
     EventEmitterModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(
@@ -43,9 +43,9 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
     {
       provide: ITransactionManager,
       useClass:
-        process.env.NODE_ENV === 'test'
-          ? InMemoryTransactionManager
-          : MikroOrmTransactionManager,
+        process.env.NODE_ENV === 'production'
+          ? MikroOrmTransactionManager
+          : InMemoryTransactionManager,
     },
   ],
 })

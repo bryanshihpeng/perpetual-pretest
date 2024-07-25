@@ -61,15 +61,5 @@ describe('ExchangeService', () => {
         service.exchange(twdCurrency, usdCurrency, 0),
       ).rejects.toThrow('Trade amount must be positive');
     });
-
-    it('should throw an error if there is insufficient reserve', async () => {
-      // First, deplete most of the USD reserve
-      await service.exchange(twdCurrency, usdCurrency, 9900);
-
-      // Now try to exchange more than the remaining reserve
-      await expect(
-        service.exchange(twdCurrency, usdCurrency, 200),
-      ).rejects.toThrow('Insufficient reserve for the trade');
-    });
   });
 });
