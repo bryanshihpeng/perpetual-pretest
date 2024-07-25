@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { MikroOrmReserveRepository } from './mikro-orm-reserve.repository';
-import { ReserveEntity } from './reserve.entity';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Currency } from '../../../domain/core/currency/currency';
 import { Reserve } from '../../../domain/reserve/reserve.aggregate-root';
+import { MikroOrmReserveRepository } from './mikro-orm-reserve.repository';
 import mikroOrmConfig from './mikro-orm.config';
+import { ReserveEntity } from './reserve.entity';
 
 describe('MikroOrmReserveRepository', () => {
   let repository: MikroOrmReserveRepository;
@@ -20,7 +20,9 @@ describe('MikroOrmReserveRepository', () => {
       providers: [MikroOrmReserveRepository],
     }).compile();
 
-    repository = module.get<MikroOrmReserveRepository>(MikroOrmReserveRepository);
+    repository = module.get<MikroOrmReserveRepository>(
+      MikroOrmReserveRepository,
+    );
     entityManager = module.get<EntityManager>(EntityManager);
 
     await entityManager.nativeDelete(ReserveEntity, {});
@@ -33,7 +35,9 @@ describe('MikroOrmReserveRepository', () => {
 
       await repository.createReserve(reserve);
 
-      const createdReserve = await entityManager.findOne(ReserveEntity, { currencyCode: 'USD' });
+      const createdReserve = await entityManager.findOne(ReserveEntity, {
+        currencyCode: 'USD',
+      });
       expect(createdReserve).toBeDefined();
       expect(createdReserve.currencyCode).toBe('USD');
       expect(createdReserve.amount).toBe(1000);
@@ -43,7 +47,9 @@ describe('MikroOrmReserveRepository', () => {
   describe('getReserve', () => {
     it('should retrieve an existing reserve', async () => {
       const currency = new Currency('US Dollar', 'USD', 2);
-      await entityManager.persistAndFlush(new ReserveEntity('USD', 'US Dollar', 2, 1000));
+      await entityManager.persistAndFlush(
+        new ReserveEntity('USD', 'US Dollar', 2, 1000),
+      );
 
       const reserve = await repository.getReserve(currency);
 
@@ -55,19 +61,25 @@ describe('MikroOrmReserveRepository', () => {
     it('should throw an error for non-existent reserve', async () => {
       const currency = new Currency('Euro', 'EUR', 2);
 
-      await expect(repository.getReserve(currency)).rejects.toThrow('Unsupported currency');
+      await expect(repository.getReserve(currency)).rejects.toThrow(
+        'Unsupported currency',
+      );
     });
   });
 
   describe('updateReserve', () => {
     it('should update an existing reserve', async () => {
       const currency = new Currency('US Dollar', 'USD', 2);
-      await entityManager.persistAndFlush(new ReserveEntity('USD', 'US Dollar', 2, 1000));
+      await entityManager.persistAndFlush(
+        new ReserveEntity('USD', 'US Dollar', 2, 1000),
+      );
 
       const updatedReserve = new Reserve(currency, 1500);
       await repository.updateReserve(updatedReserve);
 
-      const retrievedReserve = await entityManager.findOne(ReserveEntity, { currencyCode: 'USD' });
+      const retrievedReserve = await entityManager.findOne(ReserveEntity, {
+        currencyCode: 'USD',
+      });
       expect(retrievedReserve.amount).toBe(1500);
     });
 
@@ -75,7 +87,9 @@ describe('MikroOrmReserveRepository', () => {
       const currency = new Currency('Euro', 'EUR', 2);
       const reserve = new Reserve(currency, 1000);
 
-      await expect(repository.updateReserve(reserve)).rejects.toThrow('Unsupported currency');
+      await expect(repository.updateReserve(reserve)).rejects.toThrow(
+        'Unsupported currency',
+      );
     });
   });
 
