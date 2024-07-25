@@ -6,6 +6,7 @@ import {
   IsolationLevel,
   ITransactionManager,
 } from '../domain/core/transaction/transaction.interface';
+import { EventNames } from '../domain/events/event-names';
 import { ExchangeRateCalculator } from '../domain/exchange/exchange-rate-calculator';
 import { IReserveRepository } from '../domain/reserve/reserve.repository.interface';
 
@@ -63,7 +64,10 @@ export class ExchangeService {
           );
 
           // Emit event about the reserve change
-          this.eventEmitter.emit('reserveChange', [fromReserve, toReserve]);
+          this.eventEmitter.emit(EventNames.RESERVE_CHANGE, [
+            fromReserve,
+            toReserve,
+          ]);
 
           return toReserveSubtraction.amount;
           // Using Serializable isolation level for the following reasons:

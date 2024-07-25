@@ -1,12 +1,14 @@
 import { Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { OnEvent } from '@nestjs/event-emitter';
 import { Server, Socket } from 'socket.io';
+import { EventNames } from '../../domain/events/event-names';
+import { Reserve } from '../../domain/reserve/reserve.aggregate-root';
 
 @WebSocketGateway({
   cors: {
@@ -29,11 +31,11 @@ export class ReserveGateway
     this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @OnEvent('reserveChange')
-  handleReserveChangeEvent(reserves: { [key: string]: number }) {
+  @OnEvent(EventNames.RESERVE_CHANGE)
+  handleReserveChangeEvent(reserves: Reserve[]) {
     this.logger.log(
       `Emitting reserveChange event: ${JSON.stringify(reserves)}`,
     );
-    this.server.emit('reserveChange', reserves);
+    this.server.emit(EventNames.RESERVE_CHANGE, reserves);
   }
 }
