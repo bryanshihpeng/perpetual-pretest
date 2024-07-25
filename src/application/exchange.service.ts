@@ -34,7 +34,8 @@ export class ExchangeService {
 
           const money = new Money(fromCurrency, fromCurrencyAmount);
 
-          const fromReserve = await this.reserveRepository.getReserve(fromCurrency);
+          const fromReserve =
+            await this.reserveRepository.getReserve(fromCurrency);
           const toReserve = await this.reserveRepository.getReserve(toCurrency);
 
           const toReserveSubtraction =
@@ -65,7 +66,10 @@ export class ExchangeService {
           return toReserveSubtraction.amount;
         });
       } catch (error) {
-        if (error.name === 'UniqueConstraintViolationException' || error.name === 'LockWaitTimeoutException') {
+        if (
+          error.name === 'UniqueConstraintViolationException' ||
+          error.name === 'LockWaitTimeoutException'
+        ) {
           retries++;
           this.logger.warn(`Retrying transaction (attempt ${retries})`);
         } else {
