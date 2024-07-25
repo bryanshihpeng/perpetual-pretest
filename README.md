@@ -1,7 +1,5 @@
 # Currency Exchange Application
 
-Welcome to the Currency Exchange Application, a cutting-edge solution built with the [Nest](https://github.com/nestjs/nest) framework. This application is designed to provide seamless currency exchange services with real-time updates and a user-friendly interface.
-
 ## 🚀 Description
 
 This project is a sophisticated currency exchange platform that offers:
@@ -10,7 +8,9 @@ This project is a sophisticated currency exchange platform that offers:
 - **Real-time Updates**: Stay updated with the latest currency reserves through WebSockets.
 - **Interactive Front-end**: A sleek React-based interface for an enhanced user experience.
 
-The application leverages Domain-Driven Design (DDD) principles and supports both in-memory and PostgreSQL databases. For testing convenience, the default mode is in-memory, but you can easily switch the repository implementation in `src/app.module`.
+The application leverages Domain-Driven Design (DDD) principles and supports both in-memory and PostgreSQL databases.
+For testing convenience, the default mode is in-memory, but you can easily switch the repository implementation,
+see`src/app.module`.
 
 ## 🛠️ Installation
 
@@ -42,6 +42,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+Once the application is running, you can access the frontend at http://localhost:3000
+
 ## 🧪 Testing
 
 Ensure the robustness of the application with these commands:
@@ -70,20 +72,31 @@ $ npm run test:e2e
 - **Frontend**: React, Axios, Socket.IO
 - **Testing**: Jest
 
-## 📚 Documentation
+## 📁 Project Structure
 
-For detailed documentation, please refer to the [official NestJS documentation](https://docs.nestjs.com/).
+```
+currency-exchange/
+├── src/
+│   ├── application/
+│   ├── domain/
+│   │   ├── core/
+│   │   ├── exchange/
+│   │   └── reserve/
+│   ├── infrastructure/
+│   │   └── persistence/
+│   │       ├── memory/
+│   │       └── mikro-orm/
+│   └── interfaces/
+│       ├── http/
+│       │   └── client/
+│       └── websocket/
+├── test/
+└── README.md
+```
 
-## 🤝 Contributing
-
-We welcome contributions! Please fork the repository and submit your pull requests.
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## 📧 Contact
-
-For any inquiries, please contact us at [support@currencyexchange.com](mailto:support@currencyexchange.com).
-
-Thank you for using the Currency Exchange Application! We hope it meets all your currency exchange needs.
+- `src/`: Contains the main application code
+    - `application/`: Application services and DTOs
+    - `domain/`: Core domain logic and entities
+    - `infrastructure/`: Implementation details (e.g., database)
+    - `interfaces/`: API controllers and client-side code
+- `test/`: Contains test files
