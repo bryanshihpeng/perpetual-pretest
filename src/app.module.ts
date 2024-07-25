@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ExchangeService } from './application/exchange.service';
 import { IReserveRepository } from './domain/reserve/reserve.repository.interface';
-import { MikroOrmReserveRepository } from './infrastructure/persistence/mikro-orm/mikro-orm-reserve.repository';
+import { InMemoryReserveRepository } from './infrastructure/persistence/memory/in-memory-reserve.repository';
 import dbConfig from './infrastructure/persistence/mikro-orm/mikro-orm.config';
 import { ExchangeController } from './interfaces/http/exchange.controller';
 import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
@@ -21,7 +21,7 @@ import { ReserveGateway } from './interfaces/websocket/reserve.gateway';
     ReserveGateway,
     {
       provide: IReserveRepository,
-      useClass: MikroOrmReserveRepository,
+      useClass: InMemoryReserveRepository,
     },
   ],
 })
