@@ -17,17 +17,22 @@ function App() {
     const newSocket = io('http://localhost:3000');
     setSocket(newSocket);
 
-    newSocket.on('connect', () => {
+    const handleConnect = () => {
       console.log('Connected to WebSocket');
       newSocket.emit('subscribeToReserves');
-    });
+    };
 
-    newSocket.on('reservesUpdated', (updatedReserves) => {
+    const handleReservesUpdated = (updatedReserves) => {
       console.log('Received updated reserves:', updatedReserves);
       setReserves(updatedReserves);
-    });
+    };
+
+    newSocket.on('connect', handleConnect);
+    newSocket.on('reservesUpdated', handleReservesUpdated);
 
     return () => {
+      newSocket.off('connect', handleConnect);
+      newSocket.off('reservesUpdated', handleReservesUpdated);
       newSocket.emit('unsubscribeFromReserves');
       newSocket.disconnect();
     };
