@@ -77,8 +77,10 @@ function App() {
       }, 300);
 
       return () => clearTimeout(debounceTimer);
+    } else {
+      setEstimatedResult(null); // Reset estimatedResult when any input is empty
     }
-  }, [amount, from, to]);
+  }, [amount, from, to, reserves]);
 
   const handleExchange = async (e) => {
     e.preventDefault();
@@ -103,6 +105,7 @@ function App() {
           ...prevTransactions,
         ]);
         setAmount('');
+        setEstimatedResult(null); // Reset estimatedResult after successful transaction
         socket.emit('requestReserves');
       }
     } catch (error) {
