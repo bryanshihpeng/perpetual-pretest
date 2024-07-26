@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.3.10",
     "@nestjs/serve-static": "^4.0.2",
+    "@nestjs/swagger": "^7.4.0",
     "@nestjs/websockets": "^10.0.0",
     "@types/dinero.js": "^1.9.4",
     "axios": "^1.4.0",
@@ -46,7 +47,8 @@
     "react-scripts": "5.0.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@mikro-orm/cli": "^6.3.0",

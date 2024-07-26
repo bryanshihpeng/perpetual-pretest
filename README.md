@@ -73,6 +73,9 @@ $ npm run test:e2e
 - **Currency Exchange API**: Endpoints for calculating and performing currency exchanges.
 - **Real-time Updates**: WebSocket integration for live updates of currency reserves.
 - **Front-end Interface**: A React-based interface for user interactions.
+- **Currency Precision**: 
+  - TWD (New Taiwan Dollar) is handled in whole number units (no decimal places).
+  - USD (US Dollar) is handled with precision up to 2 decimal places.
 
 ## 🛠️ Technologies Used
 
