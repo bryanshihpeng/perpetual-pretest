@@ -44,6 +44,14 @@ $ npm run start:prod
 
 Once the application is running, you can access the frontend at http://localhost:3000
 
+## 📚 API Documentation
+
+The API documentation is available through Swagger UI. Once the application is running, you can access the API documentation at:
+
+http://localhost:3000/api
+
+This interactive documentation provides detailed information about all available endpoints, request/response schemas, and allows you to test the API directly from the browser.
+
 ## 🧪 Testing
 
 Ensure the robustness of the application with these commands:
